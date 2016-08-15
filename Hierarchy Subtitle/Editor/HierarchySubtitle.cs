@@ -28,8 +28,28 @@ class HierarchySubtitle
 		EditorApplication.hierarchyWindowItemOnGUI += DrawHierarchyItem;
 	}
 
+	private const string propertyName = "EnableHierarchySubtitle";
+
+	[MenuItem ("Edit/Toggle Hierarchy Subtitle")]
+	static void DoSomething () 
+	{
+		Enabled = !Enabled;
+	}
+
+	static bool Enabled {
+		get {
+			return !EditorPrefs.HasKey(propertyName) || EditorPrefs.GetBool(propertyName);
+		}
+		set {
+			EditorPrefs.SetBool(propertyName, value);
+		}
+	}
+
 	static void DrawHierarchyItem (int instanceID, Rect selectionRect)
 	{
+		if (!Enabled)
+			return;
+			
 		if (style == null)
 			GenerateStyles();
 
